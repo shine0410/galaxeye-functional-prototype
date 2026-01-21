@@ -7,6 +7,7 @@ let currentUser = null;
 let savedAOIs = [];
 let tutorialStep = 1;
 let currentHighlight = null;
+let tutorialCompleted = false;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
@@ -83,8 +84,10 @@ function showScreen(screenId) {
     if (screenId === 'dashboard-screen') {
         setTimeout(() => {
             initializeMap();
-            if (savedAOIs.length === 0) {
-                setTimeout(startTutorial, 500);
+            // Only show tutorial if user has no AOIs and hasn't completed it
+            if (savedAOIs.length === 0 && !tutorialCompleted) {
+                // Don't auto-start, let user click "Get Started"
+                // Tutorial will be triggered by the Get Started button
             }
         }, 100);
     }
@@ -668,6 +671,7 @@ function logout() {
         db.endSession();
         currentUser = null;
         savedAOIs = [];
+        tutorialCompleted = false;
         showScreen('login-screen');
         showToast('Logged out successfully', 'success');
     }
@@ -697,6 +701,7 @@ function createProgressDots() {
 
 function startTutorial() {
     tutorialStep = 1;
+    tutorialCompleted = false;
     document.getElementById('tutorial-overlay').classList.add('active');
     showTutorialStep(1);
 }
@@ -808,7 +813,8 @@ function nextTutorialStep() {
     if (tutorialStep < 6) {
         showTutorialStep(tutorialStep + 1);
     } else {
-        skipTutorial();
+        // Finish tutorial
+        completeTutorial();
     }
 }
 
@@ -819,8 +825,14 @@ function previousTutorialStep() {
 }
 
 function skipTutorial() {
+    completeTutorial();
+}
+
+function completeTutorial() {
+    tutorialCompleted = true;
     removeHighlight();
     document.getElementById('tutorial-overlay').classList.remove('active');
+    showToast('Tutorial completed! Start exploring GalaxEye', 'success');
 }
 
 // Toast Notifications
@@ -870,51 +882,6 @@ style.textContent = `
             border-color: #00d4ff;
             box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7), 0 0 30px #00d4ff;
         }
-    }
-    
-    .progress-dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.3);
-        transition: all 0.3s ease;
-    }
-    
-    .progress-dot.active {
-        background: var(--primary-color);
-        box-shadow: 0 0 10px var(--primary-color);
-    }
-    
-    .progress-dots {
-        display: flex;
-        gap: 8px;
-    }
-    
-    .tutorial-progress {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-    
-    .tutorial-nav {
-        display: flex;
-        gap: 10px;
-    }
-    
-    .format-list {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-top: 15px;
-    }
-    
-    .format-tag {
-        padding: 8px 15px;
-        background: rgba(0, 212, 255, 0.1);
-        border: 1px solid rgba(0, 212, 255, 0.3);
-        border-radius: 20px;
-        font-size: 0.9rem;
-        color: var(--primary-color);
     }
 `;
 document.head.appendChild(style);
