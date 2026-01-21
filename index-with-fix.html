@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GalaxEye Space - Functional Prototype</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- ✨ TUTORIAL OVERLAY FIX - ADD THIS SECTION ✨ -->
+    <style>
+        /* Tutorial Overlay Brightness Fix */
+        .tutorial-overlay {
+            background: rgba(0, 0, 0, 0.75) !important;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        
+        .tutorial-content {
+            background: rgba(10, 14, 39, 0.95) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.2), 
+                        0 0 100px rgba(123, 44, 191, 0.1);
+            position: relative;
+            z-index: 10001;
+        }
+        
+        .tutorial-highlight {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999 !important;
+            border: 3px solid #ffbe0b !important;
+            border-radius: 15px;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6) !important;
+            animation: pulse-border 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-border {
+            0%, 100% {
+                border-color: #ffbe0b;
+                box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 20px #ffbe0b;
+            }
+            50% {
+                border-color: #00d4ff;
+                box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 30px #00d4ff;
+            }
+        }
+    </style>
+    <!-- ✨ END OF FIX ✨ -->
+</head>
+<body>
+    <!-- Rest of your HTML remains the same -->
+    <!-- Just copy everything from your original index.html here -->
+</body>
+</html>
