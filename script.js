@@ -5,6 +5,8 @@ let drawnItems;
 let currentScreen = 'login-screen';
 let currentUser = null;
 let savedAOIs = [];
+let tutorialStep = 1;
+let currentHighlight = null;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
@@ -21,6 +23,9 @@ function initializeApp() {
     // Update time
     updateTime();
     setInterval(updateTime, 1000);
+    
+    // Create tutorial progress dots
+    createProgressDots();
 }
 
 function checkSession() {
@@ -677,12 +682,144 @@ function showPasswordReset() {
     showToast('Password reset: Contact admin@galaxeye.space', 'info');
 }
 
-// Tutorial
+// Tutorial Functions
+function createProgressDots() {
+    const dotsContainer = document.getElementById('progress-dots');
+    if (dotsContainer) {
+        for (let i = 1; i <= 6; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'progress-dot' + (i === 1 ? ' active' : '');
+            dot.dataset.step = i;
+            dotsContainer.appendChild(dot);
+        }
+    }
+}
+
 function startTutorial() {
+    tutorialStep = 1;
     document.getElementById('tutorial-overlay').classList.add('active');
+    showTutorialStep(1);
+}
+
+function showTutorialStep(step) {
+    tutorialStep = step;
+    
+    // Remove previous highlight
+    removeHighlight();
+    
+    // Hide all steps
+    document.querySelectorAll('.tutorial-step').forEach(s => s.classList.remove('active'));
+    
+    // Show current step
+    const currentStepElement = document.querySelector(`.tutorial-step[data-step="${step}"]`);
+    if (currentStepElement) {
+        currentStepElement.classList.add('active');
+    }
+    
+    // Update progress dots
+    document.querySelectorAll('.progress-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index + 1 === step);
+    });
+    
+    // Update step indicator
+    document.getElementById('tutorial-step-indicator').textContent = `${step} / 6`;
+    
+    // Update buttons
+    document.getElementById('prev-btn').disabled = step === 1;
+    
+    const nextBtn = document.getElementById('next-btn');
+    if (step === 6) {
+        nextBtn.innerHTML = '<span>Finish</span><i class="fas fa-check"></i>';
+    } else {
+        nextBtn.innerHTML = '<span>Next</span><i class="fas fa-arrow-right"></i>';
+    }
+    
+    // Add highlight for current step
+    addHighlight(step);
+}
+
+function addHighlight(step) {
+    let targetElement = null;
+    let highlightConfig = {};
+    
+    switch(step) {
+        case 1:
+            // Welcome - highlight entire sidebar
+            targetElement = document.querySelector('.sidebar');
+            highlightConfig = { padding: 10 };
+            break;
+        case 2:
+            // Upload AOI - highlight upload button
+            targetElement = document.querySelector('.menu-section:first-of-type');
+            highlightConfig = { padding: 15 };
+            break;
+        case 3:
+            // Draw AOI - highlight draw tool button
+            targetElement = document.querySelector('.map-toolbar');
+            highlightConfig = { padding: 15 };
+            break;
+        case 4:
+            // Search - highlight search button
+            targetElement = document.querySelector('[data-tool="search"]')?.parentElement;
+            highlightConfig = { padding: 10 };
+            break;
+        case 5:
+            // Data storage - highlight AOI info section
+            targetElement = document.querySelector('.menu-section:nth-of-type(4)');
+            highlightConfig = { padding: 15 };
+            break;
+        case 6:
+            // Completion - no highlight
+            break;
+    }
+    
+    if (targetElement) {
+        const rect = targetElement.getBoundingClientRect();
+        const padding = highlightConfig.padding || 10;
+        
+        // Create highlight overlay
+        const highlight = document.createElement('div');
+        highlight.className = 'tutorial-highlight';
+        highlight.style.position = 'fixed';
+        highlight.style.top = (rect.top - padding) + 'px';
+        highlight.style.left = (rect.left - padding) + 'px';
+        highlight.style.width = (rect.width + padding * 2) + 'px';
+        highlight.style.height = (rect.height + padding * 2) + 'px';
+        highlight.style.border = '3px solid #ffbe0b';
+        highlight.style.borderRadius = '15px';
+        highlight.style.pointerEvents = 'none';
+        highlight.style.zIndex = '9999';
+        highlight.style.boxShadow = '0 0 0 9999px rgba(0, 0, 0, 0.7)';
+        highlight.style.animation = 'pulse-border 2s ease-in-out infinite';
+        
+        document.body.appendChild(highlight);
+        currentHighlight = highlight;
+    }
+}
+
+function removeHighlight() {
+    if (currentHighlight) {
+        currentHighlight.remove();
+        currentHighlight = null;
+    }
+}
+
+function nextTutorialStep() {
+    if (tutorialStep < 6) {
+        showTutorialStep(tutorialStep + 1);
+    } else {
+        skipTutorial();
+    }
+}
+
+function previousTutorialStep() {
+    if (tutorialStep > 1) {
+        showTutorialStep(tutorialStep - 1);
+    }
 }
 
 function skipTutorial() {
+    removeHighlight();
     document.getElementById('tutorial-overlay').classList.remove('active');
 }
 
@@ -720,5 +857,66 @@ window.onclick = function(event) {
         event.target.classList.remove('active');
     }
 }
+
+// Add CSS for pulse animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes pulse-border {
+        0%, 100% {
+            border-color: #ffbe0b;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7), 0 0 20px #ffbe0b;
+        }
+        50% {
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7), 0 0 30px #00d4ff;
+        }
+    }
+    
+    .progress-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .progress-dot.active {
+        background: var(--primary-color);
+        box-shadow: 0 0 10px var(--primary-color);
+    }
+    
+    .progress-dots {
+        display: flex;
+        gap: 8px;
+    }
+    
+    .tutorial-progress {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .tutorial-nav {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .format-list {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 15px;
+    }
+    
+    .format-tag {
+        padding: 8px 15px;
+        background: rgba(0, 212, 255, 0.1);
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        border-radius: 20px;
+        font-size: 0.9rem;
+        color: var(--primary-color);
+    }
+`;
+document.head.appendChild(style);
 
 console.log('🛰️ GalaxEye Space - Functional Prototype Loaded');
