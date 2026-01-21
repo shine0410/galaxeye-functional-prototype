@@ -1,5 +1,5 @@
 ═══════════════════════════════════════════════════════════════
-  TUTORIAL OVERLAY BRIGHTNESS FIX - COPY & PASTE THIS
+  TUTORIAL OVERLAY BRIGHTNESS FIX - 30% OPACITY
 ═══════════════════════════════════════════════════════════════
 
 📍 WHERE TO ADD: In index.html, right after line 10 (after <link rel="stylesheet" href="styles.css">)
@@ -7,9 +7,9 @@
 📋 COPY THIS CODE:
 
 <style>
-    /* Tutorial Overlay Brightness Fix */
+    /* Tutorial Overlay Brightness Fix - 30% Opacity */
     .tutorial-overlay {
-        background: rgba(0, 0, 0, 0.75) !important;
+        background: rgba(0, 0, 0, 0.3) !important;
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
     }
@@ -31,18 +31,18 @@
         z-index: 9999 !important;
         border: 3px solid #ffbe0b !important;
         border-radius: 15px;
-        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6) !important;
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.25) !important;
         animation: pulse-border 2s ease-in-out infinite;
     }
     
     @keyframes pulse-border {
         0%, 100% {
             border-color: #ffbe0b;
-            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 20px #ffbe0b;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.25), 0 0 20px #ffbe0b;
         }
         50% {
             border-color: #00d4ff;
-            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 30px #00d4ff;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.25), 0 0 30px #00d4ff;
         }
     }
 </style>
@@ -51,7 +51,7 @@
   WHAT THIS FIXES
 ═══════════════════════════════════════════════════════════════
 
-✅ Makes overlay 25% brighter (0.75 instead of 0.9)
+✅ Makes overlay 70% brighter (0.3 instead of 0.9)
 ✅ Adds beautiful glass-morphism effect
 ✅ Highlighted elements now clearly visible
 ✅ Pulsing animation on tutorial highlights
@@ -61,7 +61,7 @@
   BEFORE & AFTER
 ═══════════════════════════════════════════════════════════════
 
-BEFORE: Everything is too dark, can't see highlighted elements
-AFTER:  Perfect visibility with spotlight effect on tutorials
+BEFORE: Everything is too dark (90% black), can't see highlighted elements
+AFTER:  Perfect visibility (30% black) with spotlight effect on tutorials
 
 ═══════════════════════════════════════════════════════════════
