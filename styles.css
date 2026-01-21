@@ -835,6 +835,15 @@ body {
     text-align: center;
 }
 
+.tutorial-step {
+    display: none;
+}
+
+.tutorial-step.active {
+    display: block;
+    animation: fadeInUp 0.5s ease;
+}
+
 .tutorial-icon {
     width: 100px;
     height: 100px;
@@ -851,8 +860,56 @@ body {
 .tutorial-controls {
     margin-top: 40px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.tutorial-progress {
+    display: flex;
+    align-items: center;
     gap: 15px;
+}
+
+.progress-dots {
+    display: flex;
+    gap: 8px;
+}
+
+.progress-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.progress-dot.active {
+    background: var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-color);
+    transform: scale(1.2);
+}
+
+.tutorial-nav {
+    display: flex;
+    gap: 10px;
+}
+
+.format-list {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.format-tag {
+    padding: 8px 15px;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: var(--primary-color);
 }
 
 #toast-container {
@@ -932,5 +989,13 @@ body {
     .sidebar {
         width: 100%;
         max-height: 300px;
+    }
+    
+    .tutorial-content {
+        padding: 30px;
+    }
+    
+    .tutorial-controls {
+        flex-direction: column;
     }
 }
