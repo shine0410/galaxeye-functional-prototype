@@ -1,5 +1,5 @@
 ═══════════════════════════════════════════════════════════════
-  TUTORIAL OVERLAY BRIGHTNESS FIX - 30% OPACITY
+  TUTORIAL OVERLAY FIX - VISIBLE UI ELEMENTS
 ═══════════════════════════════════════════════════════════════
 
 📍 WHERE TO ADD: In index.html, right after line 10 (after <link rel="stylesheet" href="styles.css">)
@@ -7,20 +7,20 @@
 📋 COPY THIS CODE:
 
 <style>
-    /* Tutorial Overlay Brightness Fix - 30% Opacity */
+    /* Tutorial Overlay Fix - Visible UI Elements */
     .tutorial-overlay {
-        background: rgba(0, 0, 0, 0.3) !important;
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        background: rgba(0, 0, 0, 0.5) !important;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
     }
     
     .tutorial-content {
-        background: rgba(10, 14, 39, 0.95) !important;
+        background: rgba(10, 14, 39, 0.98) !important;
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        border: 2px solid rgba(0, 212, 255, 0.3);
-        box-shadow: 0 20px 60px rgba(0, 212, 255, 0.2), 
-                    0 0 100px rgba(123, 44, 191, 0.1);
+        border: 2px solid rgba(0, 212, 255, 0.5);
+        box-shadow: 0 20px 60px rgba(0, 212, 255, 0.3), 
+                    0 0 100px rgba(123, 44, 191, 0.2);
         position: relative;
         z-index: 10001;
     }
@@ -28,21 +28,31 @@
     .tutorial-highlight {
         position: fixed;
         pointer-events: none;
-        z-index: 9999 !important;
-        border: 3px solid #ffbe0b !important;
+        z-index: 10002 !important;
+        border: 4px solid #ffbe0b !important;
         border-radius: 15px;
-        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.25) !important;
-        animation: pulse-border 2s ease-in-out infinite;
+        /* Bright glow instead of dark shadow */
+        box-shadow: 0 0 30px rgba(255, 190, 11, 0.8),
+                    0 0 60px rgba(255, 190, 11, 0.4),
+                    inset 0 0 20px rgba(255, 190, 11, 0.2) !important;
+        animation: pulse-highlight 2s ease-in-out infinite;
+        background: rgba(255, 190, 11, 0.1) !important;
     }
     
-    @keyframes pulse-border {
+    @keyframes pulse-highlight {
         0%, 100% {
             border-color: #ffbe0b;
-            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.25), 0 0 20px #ffbe0b;
+            box-shadow: 0 0 30px rgba(255, 190, 11, 0.8),
+                        0 0 60px rgba(255, 190, 11, 0.4),
+                        inset 0 0 20px rgba(255, 190, 11, 0.2);
+            transform: scale(1);
         }
         50% {
             border-color: #00d4ff;
-            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.25), 0 0 30px #00d4ff;
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.9),
+                        0 0 80px rgba(0, 212, 255, 0.5),
+                        inset 0 0 30px rgba(0, 212, 255, 0.3);
+            transform: scale(1.02);
         }
     }
 </style>
@@ -51,17 +61,17 @@
   WHAT THIS FIXES
 ═══════════════════════════════════════════════════════════════
 
-✅ Makes overlay 70% brighter (0.3 instead of 0.9)
-✅ Adds beautiful glass-morphism effect
-✅ Highlighted elements now clearly visible
-✅ Pulsing animation on tutorial highlights
-✅ Proper z-index layering
+✅ Removes the dark box-shadow that was covering everything
+✅ Makes background UI elements visible (50% opacity)
+✅ Adds bright glowing border to highlighted elements
+✅ Pulsing animation with scale effect
+✅ Proper z-index layering (highlight on top)
 
 ═══════════════════════════════════════════════════════════════
-  BEFORE & AFTER
+  KEY CHANGE
 ═══════════════════════════════════════════════════════════════
 
-BEFORE: Everything is too dark (90% black), can't see highlighted elements
-AFTER:  Perfect visibility (30% black) with spotlight effect on tutorials
+BEFORE: box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.9) ← This covered everything!
+AFTER:  box-shadow: 0 0 30px rgba(255, 190, 11, 0.8) ← Bright glow effect!
 
 ═══════════════════════════════════════════════════════════════
