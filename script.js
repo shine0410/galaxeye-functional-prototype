@@ -27,6 +27,40 @@ function initializeApp() {
     
     // Create tutorial progress dots
     createProgressDots();
+    
+    // Inject tutorial button into sidebar
+    injectTutorialButton();
+}
+
+function injectTutorialButton() {
+    // Wait for DOM to be ready
+    setTimeout(() => {
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) {
+            const tutorialSection = document.createElement('div');
+            tutorialSection.className = 'menu-section';
+            tutorialSection.innerHTML = `
+                <h4><i class="fas fa-question-circle"></i> Help</h4>
+                <button class="menu-btn" onclick="startTutorial()" style="background: rgba(255, 190, 11, 0.1); border-color: rgba(255, 190, 11, 0.3);">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Start Tutorial</span>
+                </button>
+            `;
+            sidebar.appendChild(tutorialSection);
+        }
+        
+        // Also add help icon to navbar
+        const navRight = document.querySelector('.nav-right');
+        if (navRight) {
+            const helpBtn = document.createElement('button');
+            helpBtn.className = 'btn btn-small';
+            helpBtn.onclick = startTutorial;
+            helpBtn.innerHTML = '<i class="fas fa-question-circle"></i>';
+            helpBtn.title = 'Start Tutorial';
+            helpBtn.style.marginRight = '10px';
+            navRight.insertBefore(helpBtn, navRight.querySelector('.user-menu'));
+        }
+    }, 500);
 }
 
 function checkSession() {
@@ -84,10 +118,10 @@ function showScreen(screenId) {
     if (screenId === 'dashboard-screen') {
         setTimeout(() => {
             initializeMap();
-            // Only show tutorial if user has no AOIs and hasn't completed it
-            if (savedAOIs.length === 0 && !tutorialCompleted) {
-                // Don't auto-start, let user click "Get Started"
-                // Tutorial will be triggered by the Get Started button
+            // Auto-start tutorial only for first-time users (no AOIs and tutorial not completed)
+            const hasSeenTutorial = localStorage.getItem('galaxeye_tutorial_completed');
+            if (savedAOIs.length === 0 && !hasSeenTutorial) {
+                setTimeout(startTutorial, 1000);
             }
         }, 100);
     }
@@ -830,6 +864,7 @@ function skipTutorial() {
 
 function completeTutorial() {
     tutorialCompleted = true;
+    localStorage.setItem('galaxeye_tutorial_completed', 'true');
     removeHighlight();
     document.getElementById('tutorial-overlay').classList.remove('active');
     showToast('Tutorial completed! Start exploring GalaxEye', 'success');
