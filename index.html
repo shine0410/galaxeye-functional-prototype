@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GalaxEye Space - Functional Prototype</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Stars Background -->
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+        <div class="auth-container">
+            <div class="auth-card glass-effect">
+                <div class="logo-container">
+                    <div class="logo-icon">
+                        <i class="fas fa-satellite"></i>
+                    </div>
+                    <h1 class="brand-name">GalaxEye<span class="brand-accent">Space</span></h1>
+                    <p class="brand-tagline">Mission Drishti - Functional Prototype</p>
+                </div>
+                
+                <form id="login-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="username"><i class="fas fa-user"></i> Username or Email</label>
+                        <input type="text" id="username" placeholder="demo@galaxeye.space" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-lock"></i> Password</label>
+                        <div class="password-input">
+                            <input type="password" id="password" placeholder="demo123" required>
+                            <button type="button" class="toggle-password" onclick="togglePassword('password')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-options">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="remember-me">
+                            <label for="remember-me">Remember Me</label>
+                        </div>
+                        <a href="#" class="link-accent" onclick="showPasswordReset()">Forgot Password?</a>
+                    </div>
+                    
+                    <div class="captcha-box glass-effect">
+                        <input type="checkbox" id="captcha" required>
+                        <label for="captcha">I'm not a robot</label>
+                        <span class="captcha-icon"><i class="fas fa-shield-alt"></i></span>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <span>Sign In</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    
+                    <div class="login-attempts" id="login-attempts"></div>
+                </form>
+                
+                <div class="divider">
+                    <span>New to GalaxEye?</span>
+                </div>
+                
+                <button class="btn btn-secondary" onclick="showScreen('register-screen')">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Request Access</span>
+                </button>
+                
+                <div class="demo-credentials">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Demo Credentials:</strong> demo@galaxeye.space / demo123
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Screen -->
+    <div id="register-screen" class="screen">
+        <div class="auth-container">
+            <div class="auth-card glass-effect wide">
+                <div class="logo-container small">
+                    <div class="logo-icon small">
+                        <i class="fas fa-satellite"></i>
+                    </div>
+                    <h2>Request Platform Access</h2>
+                    <p class="subtitle">Join the future of Earth observation</p>
+                </div>
+                
+                <form id="register-form" class="auth-form">
+                    <div class="form-section">
+                        <h3><i class="fas fa-user-circle"></i> Personal Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="full-name">Full Name *</label>
+                                <input type="text" id="full-name" placeholder="John Doe" pattern="[A-Za-z\s]+" required>
+                                <small><i class="fas fa-info-circle"></i> Alphabetic characters only</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Official Email Address *</label>
+                                <input type="email" id="email" placeholder="john.doe@organization.com" required>
+                                <small><i class="fas fa-info-circle"></i> Organizational domain required</small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="country-code">Country Code *</label>
+                                <select id="country-code" required>
+                                    <option value="+1">🇺🇸 +1 (USA/Canada)</option>
+                                    <option value="+44">🇬🇧 +44 (UK)</option>
+                                    <option value="+91" selected>🇮🇳 +91 (India)</option>
+                                    <option value="+86">🇨🇳 +86 (China)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contact-number">Contact Number *</label>
+                                <input type="tel" id="contact-number" placeholder="9876543210" pattern="[0-9]{10}" required>
+                                <small><i class="fas fa-info-circle"></i> 10 digits numeric</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3><i class="fas fa-building"></i> Organization Details</h3>
+                        <div class="form-group">
+                            <label for="org-name">Organization / Office Name *</label>
+                            <input type="text" id="org-name" placeholder="ABC Corporation" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="org-address">Organization Address *</label>
+                            <textarea id="org-address" rows="3" placeholder="Enter complete address" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3><i class="fas fa-satellite-dish"></i> Data Subscriptions</h3>
+                        <div class="subscription-grid">
+                            <label class="subscription-card">
+                                <input type="checkbox" name="subscription" value="sar">
+                                <div class="card-content">
+                                    <i class="fas fa-radar"></i>
+                                    <h4>SAR Imagery</h4>
+                                    <p>All-weather, day/night imaging</p>
+                                </div>
+                            </label>
+                            
+                            <label class="subscription-card">
+                                <input type="checkbox" name="subscription" value="multispectral">
+                                <div class="card-content">
+                                    <i class="fas fa-layer-group"></i>
+                                    <h4>Multispectral</h4>
+                                    <p>High-resolution optical data</p>
+                                </div>
+                            </label>
+                            
+                            <label class="subscription-card">
+                                <input type="checkbox" name="subscription" value="fusion">
+                                <div class="card-content">
+                                    <i class="fas fa-project-diagram"></i>
+                                    <h4>Data Fusion</h4>
+                                    <p>Combined SAR + MSI analysis</p>
+                                </div>
+                            </label>
+                            
+                            <label class="subscription-card">
+                                <input type="checkbox" name="subscription" value="analytics">
+                                <div class="card-content">
+                                    <i class="fas fa-chart-line"></i>
+                                    <h4>AI Analytics</h4>
+                                    <p>Advanced intelligence insights</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="captcha-box glass-effect">
+                        <input type="checkbox" id="register-captcha" required>
+                        <label for="register-captcha">I'm not a robot</label>
+                        <span class="captcha-icon"><i class="fas fa-shield-alt"></i></span>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="showScreen('login-screen')">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Back to Login</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <span>Submit Request</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Screen -->
+    <div id="dashboard-screen" class="screen">
+        <nav class="navbar glass-effect">
+            <div class="nav-left">
+                <div class="logo-icon small">
+                    <i class="fas fa-satellite"></i>
+                </div>
+                <span class="nav-brand">GalaxEye<span class="brand-accent">Space</span></span>
+                <span class="nav-subtitle">Mission Drishti</span>
+            </div>
+            <div class="nav-right">
+                <div class="nav-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-satellite-dish"></i>
+                        <span id="satellite-count">8 Satellites</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-clock"></i>
+                        <span id="current-time"></span>
+                    </div>
+                </div>
+                <div class="user-menu">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="user-name" id="user-name">Demo User</span>
+                    <button class="btn btn-small" onclick="showUserMenu()">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <button class="btn btn-small" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="dashboard-container">
+            <aside class="sidebar glass-effect">
+                <div class="sidebar-header">
+                    <h3><i class="fas fa-tasks"></i> Mission Control</h3>
+                </div>
+                
+                <div class="menu-section">
+                    <h4><i class="fas fa-map-marked-alt"></i> Area of Interest</h4>
+                    <button class="menu-btn" onclick="showUploadDialog()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Upload AOI File</span>
+                    </button>
+                    <button class="menu-btn" onclick="activateDrawTool()">
+                        <i class="fas fa-draw-polygon"></i>
+                        <span>Draw AOI</span>
+                    </button>
+                    <button class="menu-btn" onclick="showSearchDialog()">
+                        <i class="fas fa-search-location"></i>
+                        <span>Search Location</span>
+                    </button>
+                    <button class="menu-btn" onclick="showSavedAOIs()">
+                        <i class="fas fa-bookmark"></i>
+                        <span>Saved AOIs (<span id="saved-count">0</span>)</span>
+                    </button>
+                </div>
+                
+                <div class="menu-section">
+                    <h4><i class="fas fa-sliders-h"></i> Map Controls</h4>
+                    <div class="control-grid">
+                        <button class="control-btn" onclick="zoomIn()" title="Zoom In">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="control-btn" onclick="zoomOut()" title="Zoom Out">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button class="control-btn" onclick="resetView()" title="Reset View">
+                            <i class="fas fa-globe"></i>
+                        </button>
+                        <button class="control-btn" onclick="toggleFullscreen()" title="Fullscreen">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <h4><i class="fas fa-layer-group"></i> Data Layers</h4>
+                    <div class="layer-list">
+                        <label class="layer-item">
+                            <input type="checkbox" checked onchange="toggleLayer('satellite')">
+                            <span><i class="fas fa-satellite"></i> Satellite View</span>
+                        </label>
+                        <label class="layer-item">
+                            <input type="checkbox" onchange="toggleLayer('sar')">
+                            <span><i class="fas fa-radar"></i> SAR Overlay</span>
+                        </label>
+                        <label class="layer-item">
+                            <input type="checkbox" onchange="toggleLayer('weather')">
+                            <span><i class="fas fa-cloud"></i> Weather Data</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <h4><i class="fas fa-satellite-dish"></i> Active Subscriptions</h4>
+                    <div class="subscription-list">
+                        <div class="badge badge-sar"><i class="fas fa-radar"></i> SAR Imagery</div>
+                        <div class="badge badge-multi"><i class="fas fa-layer-group"></i> Multispectral</div>
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <h4><i class="fas fa-info-circle"></i> AOI Information</h4>
+                    <div id="aoi-info" class="info-box glass-effect">
+                        <p><i class="fas fa-map-marker-alt"></i> No AOI selected</p>
+                        <p class="info-hint">Draw or upload an area to begin</p>
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <h4><i class="fas fa-download"></i> Quick Actions</h4>
+                    <button class="menu-btn" onclick="exportAOI()" disabled id="export-btn">
+                        <i class="fas fa-file-export"></i>
+                        <span>Export AOI</span>
+                    </button>
+                    <button class="menu-btn" onclick="generateReport()" disabled id="report-btn">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Generate Report</span>
+                    </button>
+                </div>
+            </aside>
+            
+            <main class="map-container">
+                <div id="map"></div>
+                
+                <div class="map-overlay top-left glass-effect">
+                    <div class="overlay-item">
+                        <i class="fas fa-satellite"></i>
+                        <span>Mission Drishti</span>
+                    </div>
+                    <div class="overlay-item">
+                        <i class="fas fa-signal"></i>
+                        <span class="live-indicator">Live Feed</span>
+                    </div>
+                </div>
+                
+                <div class="map-overlay top-right glass-effect">
+                    <div class="stats-panel">
+                        <div class="stat">
+                            <span class="stat-label">AOIs Created</span>
+                            <span class="stat-value" id="aoi-count">0</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Total Area</span>
+                            <span class="stat-value" id="total-area">0 km²</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="map-toolbar glass-effect">
+                    <button class="tool-btn" onclick="activateDrawTool()" title="Draw Rectangle" data-tool="draw">
+                        <i class="fas fa-vector-square"></i>
+                        <span>Draw</span>
+                    </button>
+                    <button class="tool-btn" onclick="activatePolygonTool()" title="Draw Polygon" data-tool="polygon">
+                        <i class="fas fa-draw-polygon"></i>
+                        <span>Polygon</span>
+                    </button>
+                    <button class="tool-btn" onclick="showUploadDialog()" title="Upload File" data-tool="upload">
+                        <i class="fas fa-file-upload"></i>
+                        <span>Upload</span>
+                    </button>
+                    <button class="tool-btn" onclick="showSearchDialog()" title="Search" data-tool="search">
+                        <i class="fas fa-search"></i>
+                        <span>Search</span>
+                    </button>
+                    <button class="tool-btn" onclick="activateMeasureTool()" title="Measure" data-tool="measure">
+                        <i class="fas fa-ruler"></i>
+                        <span>Measure</span>
+                    </button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="upload-dialog" class="modal">
+        <div class="modal-content glass-effect">
+            <span class="close" onclick="closeUploadDialog()"><i class="fas fa-times"></i></span>
+            <h2><i class="fas fa-cloud-upload-alt"></i> Upload AOI File</h2>
+            <div class="upload-area" id="upload-area">
+                <i class="fas fa-file-upload upload-icon"></i>
+                <p class="upload-text">Drag & Drop or Click to Upload</p>
+                <p class="upload-formats">KML • KMZ • GeoJSON • JSON • TXT • Shapefile (.zip)</p>
+                <input type="file" id="file-input" accept=".kml,.kmz,.geojson,.json,.txt,.zip" style="display: none;">
+            </div>
+            <div id="upload-status"></div>
+        </div>
+    </div>
+
+    <div id="search-dialog" class="modal">
+        <div class="modal-content glass-effect">
+            <span class="close" onclick="closeSearchDialog()"><i class="fas fa-times"></i></span>
+            <h2><i class="fas fa-search-location"></i> Search Location</h2>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="location-search" placeholder="Enter location name..." class="search-input">
+            </div>
+            <button class="btn btn-primary" onclick="searchLocation()">
+                <span>Search</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <div id="search-results"></div>
+        </div>
+    </div>
+
+    <div id="saved-aois-dialog" class="modal">
+        <div class="modal-content glass-effect wide">
+            <span class="close" onclick="closeSavedAOIs()"><i class="fas fa-times"></i></span>
+            <h2><i class="fas fa-bookmark"></i> Saved AOIs</h2>
+            <div id="saved-aois-list" class="saved-list"></div>
+        </div>
+    </div>
+
+    <div id="success-modal" class="modal">
+        <div class="modal-content glass-effect success">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Registration Successful!</h2>
+            <p>Your access request has been submitted to the GalaxEye team.</p>
+            <p class="success-detail">You will receive an email notification once your account is approved.</p>
+            <button class="btn btn-primary" onclick="closeSuccessModal()">
+                <span>Back to Login</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Tutorial Overlay -->
+    <div id="tutorial-overlay" class="tutorial-overlay">
+        <div class="tutorial-content glass-effect">
+            <div class="tutorial-step active" data-step="1">
+                <div class="tutorial-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h2>Welcome to Mission Drishti! 🛰️</h2>
+                <p>This functional prototype demonstrates real GIS capabilities, data processing, and user management.</p>
+            </div>
+            
+            <div class="tutorial-controls">
+                <button class="btn btn-secondary" onclick="skipTutorial()">
+                    <i class="fas fa-times"></i>
+                    <span>Skip Tutorial</span>
+                </button>
+                <button class="btn btn-primary" onclick="skipTutorial()">
+                    <span>Get Started</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+    <script src="database.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
