@@ -1,0 +1,56 @@
+═══════════════════════════════════════════════════════════════
+  HOW TO ADD TUTORIAL-REDESIGN.JS TO INDEX.HTML
+═══════════════════════════════════════════════════════════════
+
+📍 LOCATION: index.html, line 520 (before </body>)
+
+📋 CURRENT CODE (lines 515-522):
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+    <script src="database.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
+📋 NEW CODE (add one line):
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+    <script src="database.js"></script>
+    <script src="script.js"></script>
+    
+    <!-- ✨ REDESIGNED TUTORIAL SYSTEM ✨ -->
+    <script src="tutorial-redesign.js"></script>
+</body>
+</html>
+
+═══════════════════════════════════════════════════════════════
+  WHAT TO DO
+═══════════════════════════════════════════════════════════════
+
+1. Open index.html in your editor
+2. Go to line 520 (before </body>)
+3. Add these two lines:
+
+    <!-- ✨ REDESIGNED TUTORIAL SYSTEM ✨ -->
+    <script src="tutorial-redesign.js"></script>
+
+4. Save the file
+5. Refresh your browser
+6. Login and click "Start Tutorial" button
+
+═══════════════════════════════════════════════════════════════
+  THAT'S IT!
+═══════════════════════════════════════════════════════════════
+
+The new tutorial system will automatically:
+✅ Initialize on page load
+✅ Add "Start Tutorial" button to sidebar
+✅ Create overlay and tooltip elements
+✅ Handle all tutorial interactions
+✅ Show visible UI with bright highlights
+
+═══════════════════════════════════════════════════════════════
