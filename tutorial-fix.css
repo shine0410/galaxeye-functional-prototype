@@ -1,4 +1,4 @@
-/* Tutorial Overlay Fix - Add this to styles.css or include separately */
+/* Tutorial Overlay Brightness Fix - 30% Opacity */
 
 .tutorial-overlay {
     display: none;
@@ -7,7 +7,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.75) !important; /* Less dark - was 0.9 */
+    background: rgba(0, 0, 0, 0.3) !important;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     z-index: 10000;
@@ -20,7 +20,7 @@
 }
 
 .tutorial-content {
-    background: rgba(10, 14, 39, 0.95) !important; /* Glass-morphism background */
+    background: rgba(10, 14, 39, 0.95) !important;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 2px solid rgba(0, 212, 255, 0.3);
@@ -35,24 +35,23 @@
     z-index: 10001;
 }
 
-/* Make tutorial highlight more visible */
 .tutorial-highlight {
     position: fixed;
     pointer-events: none;
     z-index: 9999 !important;
     border: 3px solid #ffbe0b !important;
     border-radius: 15px;
-    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6) !important; /* Less dark shadow */
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.25) !important;
     animation: pulse-border 2s ease-in-out infinite;
 }
 
 @keyframes pulse-border {
     0%, 100% {
         border-color: #ffbe0b;
-        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 20px #ffbe0b;
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.25), 0 0 20px #ffbe0b;
     }
     50% {
         border-color: #00d4ff;
-        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 30px #00d4ff;
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.25), 0 0 30px #00d4ff;
     }
 }
