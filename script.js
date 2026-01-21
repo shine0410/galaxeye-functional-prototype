@@ -28,39 +28,12 @@ function initializeApp() {
     // Create tutorial progress dots
     createProgressDots();
     
-    // Inject tutorial button into sidebar
-    injectTutorialButton();
-}
-
-function injectTutorialButton() {
-    // Wait for DOM to be ready
-    setTimeout(() => {
-        const sidebar = document.querySelector('.sidebar');
-        if (sidebar) {
-            const tutorialSection = document.createElement('div');
-            tutorialSection.className = 'menu-section';
-            tutorialSection.innerHTML = `
-                <h4><i class="fas fa-question-circle"></i> Help</h4>
-                <button class="menu-btn" onclick="startTutorial()" style="background: rgba(255, 190, 11, 0.1); border-color: rgba(255, 190, 11, 0.3);">
-                    <i class="fas fa-graduation-cap"></i>
-                    <span>Start Tutorial</span>
-                </button>
-            `;
-            sidebar.appendChild(tutorialSection);
-        }
-        
-        // Also add help icon to navbar
-        const navRight = document.querySelector('.nav-right');
-        if (navRight) {
-            const helpBtn = document.createElement('button');
-            helpBtn.className = 'btn btn-small';
-            helpBtn.onclick = startTutorial;
-            helpBtn.innerHTML = '<i class="fas fa-question-circle"></i>';
-            helpBtn.title = 'Start Tutorial';
-            helpBtn.style.marginRight = '10px';
-            navRight.insertBefore(helpBtn, navRight.querySelector('.user-menu'));
-        }
-    }, 500);
+    // Check for tutorial URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('tutorial') === 'true' || urlParams.get('tutorial') === '1') {
+        console.log('🎓 Tutorial forced via URL parameter');
+        localStorage.removeItem('galaxeye_tutorial_completed');
+    }
 }
 
 function checkSession() {
@@ -118,13 +91,82 @@ function showScreen(screenId) {
     if (screenId === 'dashboard-screen') {
         setTimeout(() => {
             initializeMap();
+            
+            // Inject tutorial button AFTER dashboard is loaded
+            injectTutorialButton();
+            
             // Auto-start tutorial only for first-time users (no AOIs and tutorial not completed)
             const hasSeenTutorial = localStorage.getItem('galaxeye_tutorial_completed');
-            if (savedAOIs.length === 0 && !hasSeenTutorial) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const forceTutorial = urlParams.get('tutorial') === 'true' || urlParams.get('tutorial') === '1';
+            
+            console.log('📊 Tutorial check:', {
+                savedAOIs: savedAOIs.length,
+                hasSeenTutorial,
+                forceTutorial
+            });
+            
+            if (forceTutorial || (savedAOIs.length === 0 && !hasSeenTutorial)) {
+                console.log('🎓 Starting tutorial...');
                 setTimeout(startTutorial, 1000);
             }
         }, 100);
     }
+}
+
+function injectTutorialButton() {
+    console.log('💉 Injecting tutorial button...');
+    
+    // Wait for sidebar to be fully rendered
+    setTimeout(() => {
+        const sidebar = document.querySelector('.sidebar');
+        console.log('📍 Sidebar found:', !!sidebar);
+        
+        if (sidebar) {
+            // Check if already injected
+            if (document.querySelector('.tutorial-help-section')) {
+                console.log('⚠️ Tutorial button already exists');
+                return;
+            }
+            
+            const tutorialSection = document.createElement('div');
+            tutorialSection.className = 'menu-section tutorial-help-section';
+            tutorialSection.innerHTML = `
+                <h4><i class="fas fa-question-circle"></i> Help</h4>
+                <button class="menu-btn" onclick="startTutorial()" style="background: rgba(255, 190, 11, 0.1); border-color: rgba(255, 190, 11, 0.3);">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Start Tutorial</span>
+                </button>
+                <button class="menu-btn" onclick="resetTutorial()" style="background: rgba(255, 0, 110, 0.05); border-color: rgba(255, 0, 110, 0.2); font-size: 0.85rem; padding: 8px 12px; margin-top: 5px;">
+                    <i class="fas fa-redo"></i>
+                    <span>Reset Tutorial Data</span>
+                </button>
+            `;
+            sidebar.appendChild(tutorialSection);
+            console.log('✅ Tutorial button injected successfully');
+        }
+        
+        // Also add help icon to navbar
+        const navRight = document.querySelector('.nav-right');
+        console.log('📍 Nav right found:', !!navRight);
+        
+        if (navRight) {
+            // Check if already injected
+            if (document.querySelector('.tutorial-help-btn')) {
+                console.log('⚠️ Help icon already exists');
+                return;
+            }
+            
+            const helpBtn = document.createElement('button');
+            helpBtn.className = 'btn btn-small tutorial-help-btn';
+            helpBtn.onclick = startTutorial;
+            helpBtn.innerHTML = '<i class="fas fa-question-circle"></i>';
+            helpBtn.title = 'Start Tutorial';
+            helpBtn.style.marginRight = '10px';
+            navRight.insertBefore(helpBtn, navRight.querySelector('.user-menu'));
+            console.log('✅ Help icon injected successfully');
+        }
+    }, 500);
 }
 
 // Event Listeners
@@ -734,10 +776,26 @@ function createProgressDots() {
 }
 
 function startTutorial() {
+    console.log('🎓 Starting tutorial...');
     tutorialStep = 1;
     tutorialCompleted = false;
-    document.getElementById('tutorial-overlay').classList.add('active');
-    showTutorialStep(1);
+    const overlay = document.getElementById('tutorial-overlay');
+    if (overlay) {
+        overlay.classList.add('active');
+        showTutorialStep(1);
+        console.log('✅ Tutorial overlay activated');
+    } else {
+        console.error('❌ Tutorial overlay not found!');
+        showToast('Tutorial overlay not found. Please refresh the page.', 'error');
+    }
+}
+
+function resetTutorial() {
+    if (confirm('This will clear your tutorial progress and restart it. Continue?')) {
+        localStorage.removeItem('galaxeye_tutorial_completed');
+        showToast('Tutorial data cleared! Click "Start Tutorial" to begin.', 'success');
+        console.log('🔄 Tutorial data reset');
+    }
 }
 
 function showTutorialStep(step) {
@@ -761,16 +819,24 @@ function showTutorialStep(step) {
     });
     
     // Update step indicator
-    document.getElementById('tutorial-step-indicator').textContent = `${step} / 6`;
+    const indicator = document.getElementById('tutorial-step-indicator');
+    if (indicator) {
+        indicator.textContent = `${step} / 6`;
+    }
     
     // Update buttons
-    document.getElementById('prev-btn').disabled = step === 1;
+    const prevBtn = document.getElementById('prev-btn');
+    if (prevBtn) {
+        prevBtn.disabled = step === 1;
+    }
     
     const nextBtn = document.getElementById('next-btn');
-    if (step === 6) {
-        nextBtn.innerHTML = '<span>Finish</span><i class="fas fa-check"></i>';
-    } else {
-        nextBtn.innerHTML = '<span>Next</span><i class="fas fa-arrow-right"></i>';
+    if (nextBtn) {
+        if (step === 6) {
+            nextBtn.innerHTML = '<span>Finish</span><i class="fas fa-check"></i>';
+        } else {
+            nextBtn.innerHTML = '<span>Next</span><i class="fas fa-arrow-right"></i>';
+        }
     }
     
     // Add highlight for current step
@@ -866,8 +932,12 @@ function completeTutorial() {
     tutorialCompleted = true;
     localStorage.setItem('galaxeye_tutorial_completed', 'true');
     removeHighlight();
-    document.getElementById('tutorial-overlay').classList.remove('active');
+    const overlay = document.getElementById('tutorial-overlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+    }
     showToast('Tutorial completed! Start exploring GalaxEye', 'success');
+    console.log('✅ Tutorial completed and saved to localStorage');
 }
 
 // Toast Notifications
@@ -922,3 +992,4 @@ style.textContent = `
 document.head.appendChild(style);
 
 console.log('🛰️ GalaxEye Space - Functional Prototype Loaded');
+console.log('💡 Tip: Add ?tutorial=true to URL to force-start tutorial');
