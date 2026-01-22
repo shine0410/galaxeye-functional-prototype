@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Subscription Cards - Demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="enhanced-subscription-cards.css">
+    <style>
+        body {
+            padding: 50px;
+            background: #0a0e27;
+        }
+        .demo-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .demo-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .demo-header h1 {
+            color: #00d4ff;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .demo-header p {
+            color: #b8c5d6;
+            font-size: 16px;
+        }
+        .demo-section {
+            margin-bottom: 40px;
+        }
+        .demo-section h3 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .instructions {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .instructions h4 {
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+        .instructions ul {
+            color: #b8c5d6;
+            margin-left: 20px;
+        }
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .feature-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #b8c5d6;
+        }
+        .feature-item i {
+            color: #00d4ff;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1><i class="fas fa-sparkles"></i> Enhanced Subscription Cards Demo</h1>
+            <p>Interactive preview of the new subscription card design</p>
+        </div>
+
+        <div class="instructions">
+            <h4><i class="fas fa-info-circle"></i> How to Test:</h4>
+            <ul>
+                <li><strong>Hover</strong> over any card to see the cyan glow effect</li>
+                <li><strong>Click</strong> a card to select it (checkmark appears)</li>
+                <li><strong>Click again</strong> to deselect</li>
+                <li><strong>Select multiple</strong> cards to see them all highlighted</li>
+            </ul>
+        </div>
+
+        <div class="demo-section">
+            <h3><i class="fas fa-satellite-dish"></i> Data Subscriptions</h3>
+            
+            <div class="subscription-grid">
+                <div class="subscription-card">
+                    <input type="checkbox" id="demo-sar" name="subscription" value="sar">
+                    <label for="demo-sar" class="card-content">
+                        <i class="fas fa-radar"></i>
+                        <h4>SAR Imagery</h4>
+                        <p>All-weather monitoring</p>
+                    </label>
+                </div>
+                
+                <div class="subscription-card">
+                    <input type="checkbox" id="demo-multi" name="subscription" value="multispectral">
+                    <label for="demo-multi" class="card-content">
+                        <i class="fas fa-layer-group"></i>
+                        <h4>Multispectral</h4>
+                        <p>Detailed analysis</p>
+                    </label>
+                </div>
+                
+                <div class="subscription-card">
+                    <input type="checkbox" id="demo-fusion" name="subscription" value="fusion">
+                    <label for="demo-fusion" class="card-content">
+                        <i class="fas fa-project-diagram"></i>
+                        <h4>Data Fusion</h4>
+                        <p>Combined insights</p>
+                    </label>
+                </div>
+                
+                <div class="subscription-card">
+                    <input type="checkbox" id="demo-analytics" name="subscription" value="analytics">
+                    <label for="demo-analytics" class="card-content">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>Analytics</h4>
+                        <p>Advanced processing</p>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h3><i class="fas fa-magic"></i> Features</h3>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <i class="fas fa-hand-pointer"></i>
+                    <strong>Hover Effect:</strong> Subtle cyan glow
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <strong>Selected State:</strong> Bright border + checkmark
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-sparkles"></i>
+                    <strong>Shimmer Animation:</strong> Moving gradient
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-heartbeat"></i>
+                    <strong>Pulsing Icons:</strong> Animated when selected
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-mobile-alt"></i>
+                    <strong>Responsive:</strong> Works on all devices
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-bolt"></i>
+                    <strong>Smooth Transitions:</strong> Buttery animations
+                </div>
+            </div>
+        </div>
+
+        <div class="instructions" style="margin-top: 40px;">
+            <h4><i class="fas fa-rocket"></i> Ready to Use!</h4>
+            <ul>
+                <li>This demo shows exactly how the cards will look in your registration form</li>
+                <li>To add to your main site, follow instructions in <code>ADD_ENHANCED_CARDS.md</code></li>
+                <li>Just add one line to your <code>index.html</code> and you're done!</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactivity feedback
+        document.querySelectorAll('.subscription-card input').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const card = this.closest('.subscription-card');
+                if (this.checked) {
+                    console.log('✅ Selected:', this.value);
+                } else {
+                    console.log('❌ Deselected:', this.value);
+                }
+            });
+        });
+
+        // Log when page loads
+        console.log('🎨 Enhanced Subscription Cards Demo Loaded!');
+        console.log('👆 Try hovering and clicking the cards above');
+    </script>
+</body>
+</html>
